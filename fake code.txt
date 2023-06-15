@@ -1,0 +1,121 @@
+bool running = true;
+
+void render()
+{
+	//Gioi han FPS de hinh anh ko chay qua nhanh
+	limitFPS();
+
+	//Viet so mang, dien ra man hinh
+	write( lives );
+	write (score );
+
+	//Dat mau de to vao brick neu no con song
+	for(int i=0;i<col*row;i++)
+	{
+		setColor();
+		if( brick[i] == true ) drawBrick(brick,i);
+	}
+
+	//chuan bi da xong, render ra man hinh
+	rendering(renderer);
+}
+
+void input()
+{
+	//Nhan -> thi di chuyen sang phai 1 don vi padSpeed
+	if( keypress == leftArrowkey ) 
+	{
+		pad.x += padSpeed;
+	}
+	
+	//Nhan <- thi di chuyen sang trai 1 don vi padSpeed
+	if( keypress == rightArrowkey)
+	{
+		pad.x -= padSpeed;
+	}
+	
+	//Nhan esc thi out game
+	if( keypress == escKey)
+	{
+		running = false;
+	}
+}
+
+void update()
+{
+	//Ball di chuyen, van toc theo 2 truc x,y thay doi
+	move(ball, velX, velY);
+
+	//Kiem tra va cham voi pad, neu co cham vao thi tinh goc nay de cho ball nay len
+	if( checkIntersection(ball,pad) == true )
+	{
+		bounceAngle = calcBouceAngle()
+		velY = - ballSpeed * cos(bounceAngle);
+		velX = ballSpeed * sin(bounceAngle);
+	}
+	
+	//Kiem tra cham bien tren man hinh, neu co thi nay xuong
+	if (CollidewUpperbound == true )
+	{
+		velY = -velY;
+	}
+
+	//Kiem tra cham bien trai/phai, neu co thi nay sang 
+	if (CollidewLeftbound == true || collidewRightbound == true)
+	{
+		velX = -velX;
+	}
+
+	//Kiem tra xem co roi xuong day man hinh ko, neu co la mat mang va ball, pad tro lai i tri trung tam man hinh
+	if( dropped == true )
+	{
+		live --;
+		resetPadnBall();
+	}
+
+	//Mat het mang thi reset choi man moi
+	if( live ==0)
+	{
+		score =0;
+		resetBrick();
+		live = 3;
+	}
+
+	//Duyet qua tung brick, neu co va cham thi cho an brick do va cong them diem, dong thoi kiem tra mat va cham xem la mat nao de xac dinh chieu nay lai cua ball
+	for(int i = 0; i < row*col ; i++)
+	{
+		setBrick(i);
+		if (checkIntersection(ball, brick[i]) == true)
+		{
+			brick[i] = false;
+			score++;
+			checkCollisionSide();
+		}
+		
+	}
+}
+
+int main()
+{	
+	//Khoi tao
+	createSDLWindow();
+	{
+		setPadnBallColor();
+		setPadSize(pad);
+		setBallSize(ball);
+
+		setBrickColor();
+	}
+	displayMenu();
+	running = true;
+	while ( running )
+	{
+		limitFPS();
+		update();
+		input();
+		render();
+	}
+
+	cleanscreen();
+	closeSDL();
+}

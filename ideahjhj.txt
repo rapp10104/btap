@@ -1,0 +1,5 @@
+ý tưởng (luật chơi) :
+- Trò chơi gồm 1 ball, 1 pad do người điều khiển và các ô brick (vị trí cố định)
+- Ball gặpp phải pad, brick hoặc rìa màn hình sẽ nảy lại. Nếu nó rơi xuống rìa dưới của màn hình thì sẽ mất mạng và ball được đặt lại ở đầu trái của pad. Nếu mất quá 3 mạng thì thua và các ô brick sẽ được xếp lại như 1 lượt chơi mới
+- Nếu ball phá được hết các brick thì chúng cũng sẽ được sắp xếp lại như 1 lượt chơi mới
+- Pad chỉ di chuyển sang trái hoặc phải 1 khoảng cố định mỗi khi ấn phím <- hoặc ->
